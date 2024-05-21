@@ -1,0 +1,29 @@
+{block content}
+    <p><a n:href="Home:default">← zpět na výpis příspěvků</a></p>
+
+
+    <div class="date">{$post->created_at|date:'F j, Y'}</div>
+    <h1 n:block="title">{$post->title}</h1>
+    <div class="post">{$post->content}</div>
+    <p>Počet zhlédnutí: {$post->views}</p>
+
+    {if $post->image}
+        <img src="{$basePath}/{$post->image}" width="200" alt="Obrázek k článku {$post->title}">
+        <a n:href="deleteImage! $post->id">Smazat obrázek</a>
+    {/if}
+
+    <div class="post">{$post->status}</div>
+
+    <h2>Komentáře</h2>
+
+    {if $post->status !== 'ARCHIVED' && ($post->status !== 'CLOSED' || $user->isLoggedIn())}
+        {control commentForm}
+    {/if}
+
+    <div class="comments">
+        {foreach $comments as $comment} 
+            <p><b>{$comment->name}</b> napsal:</p>
+            <div>{$comment->content}</div>
+        {/foreach}
+    </div>
+{/block}

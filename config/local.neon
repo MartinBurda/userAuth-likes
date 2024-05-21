@@ -1,0 +1,5 @@
+database:
+
+  dsn: 'mysql:host=127.0.0.1;dbname=cmop'
+  user: root
+  password: root

@@ -1,0 +1,41 @@
+{block content}
+    <h1>Můj blog</h1>
+
+    <div class="posts">
+        {foreach $posts as $post}
+                            {if (!$user->isLoggedIn() && $post->status !== 'ARCHIVED') || $user->isLoggedIn()}
+<div class="post">
+                    <h2><a n:href="Post:show $post->id">{$post->title}</a></h2>
+                    
+                    {if $post->image}
+                        <img src="{$basePath}/{$post->image}" width="200" alt="Obrázek k článku {$post->title}">
+                    {/if}
+                    
+                    <div class="date">{$post->created_at|date:'F j, Y'}</div>
+                    <div class="post">{$post->status}</div>
+                    <p>Počet zhlédnutí: {$post->views}</p>
+                    <div>{$post->content|truncate:256}</div>
+                
+            </div>
+            {/if}
+        {/foreach}
+    </div>
+
+    <div class="pagination">
+        {if $page > 1}
+            <a n:href="default, 1">První</a>
+             | 
+            <a n:href="default, $page - 1">Předchozí</a>
+             | 
+        {/if}
+
+        Stránka {$page} z {$lastPage}
+
+        {if $page < $lastPage}
+             | 
+            <a n:href="default, $page + 1">Další</a>
+             | 
+            <a n:href="default, $lastPage">Poslední</a>
+        {/if}
+    </div>
+{/block}
