@@ -1,5 +1,5 @@
 database:
 
-  dsn: 'mysql:host=127.0.0.1;dbname=cmop'
+  dsn: 'mysql:host=127.0.0.1;dbname=usertest2'
   user: root
   password: root

@@ -88,4 +88,33 @@ final class PostFacade
 			->where('created_at < ', new \DateTime)
 			->order('created_at DESC');
 	}
+
+
+    public function updateRating(int $userId, int $postId, int $liked)
+    {
+        $existingRating = $this->database->table('rating')
+            ->where('user_id', $userId)
+            ->where('post_id', $postId)
+            ->fetch();
+
+        if ($existingRating) {
+            $existingRating->update([
+                'likes' => $liked
+            ]);
+        } else {
+            $this->database->table('rating')->insert([
+                'user_id' => $userId,
+                'post_id' => $postId,
+                'likes' => $liked
+            ]);
+        }
+    }
+
+   
 }
+
+
+
+
+
+

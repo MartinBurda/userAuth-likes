@@ -41,7 +41,7 @@ class PostPresenter extends \Nette\Application\UI\Presenter
             case 'ARCHIVED':
                 if ($post->status === 'ARCHIVED' && !$this->getUser()->isLoggedIn()) {
                     $this->flashMessage('Nemáš právo vidět archived, kámo!', 'warning');
-                    $this->redirect('Home:');
+                    $this->redirect('Home:default');
                 }
                 // Pro archivované příspěvky je potřeba být přihlášený
                 $this->template->post = $post;
@@ -99,4 +99,17 @@ class PostPresenter extends \Nette\Application\UI\Presenter
             $this->flashMessage('Obrázek k příspěvku byl smazán');
         }
     }
+    public function handleLiked(int $postId, int $liked)
+    {
+        if ($this->getUser()->isLoggedIn()) {
+            $userId = $this->getUser()->getId();
+            $this->postFacade->updateRating($userId, $postId, $liked);
+        } else {
+            $this->flashMessage('Musíte být přihlášeni, abyste mohli hodnotit příspěvky.', 'warning');
+        }
+        $this->redirect('this');
+    }
+    
+
+
 }

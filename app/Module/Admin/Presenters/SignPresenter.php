@@ -49,7 +49,7 @@ final class SignPresenter extends Nette\Application\UI\Presenter
 	protected function createComponentSignUpForm(): Form
 	{
 		return $this->signUpFactory->create(function (): void {
-			$this->redirect('Dashboard:');
+			$this->redirect('Home:default');
 		});
 	}
 
