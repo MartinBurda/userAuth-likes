@@ -109,6 +109,13 @@ final class PostFacade
             ]);
         }
     }
+    public function getUserRating(int $userId, int $postId)
+    {
+        return $this->database->table('rating')
+            ->where('user_id', $userId)
+            ->where('post_id', $postId)
+            ->fetch();
+    }
 
    
 }

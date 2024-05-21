@@ -1,8 +1,16 @@
 {block content}
     <p><a n:href="Home:default">← zpět na výpis příspěvků</a></p>
     
-    <a n:href="liked! $post->id, 1">Líbí se mi!</a>
-    <a n:href="liked! $post->id, 0">Nelíbí se mi!</a>
+    
+        {if $userRating === null}
+            <a n:href="liked! $post->id, 1">Líbí se mi!</a>
+            <a n:href="liked! $post->id, 0">Nelíbí se mi!</a>
+        {elseif $userRating === 1}
+            <a n:href="liked! $post->id, 0">Nelíbí se mi!</a>
+        {elseif $userRating === 0}
+            <a n:href="liked! $post->id, 1">Líbí se mi!</a>
+        {/if}
+    
 
 
     <div class="date">{$post->created_at|date:'F j, Y'}</div>

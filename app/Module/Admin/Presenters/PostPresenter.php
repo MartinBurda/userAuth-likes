@@ -3,7 +3,7 @@ namespace App\Module\Admin\Presenters;
 
 use Nette;
 use Nette\Application\UI\Form;
-use App\Model\PostFacade; // Add missing import statement for PostFacade
+use App\Model\PostFacade;
 
 class PostPresenter extends \Nette\Application\UI\Presenter
 {
@@ -19,8 +19,9 @@ class PostPresenter extends \Nette\Application\UI\Presenter
         $this->template->posts = $this->postFacade->getPostById('posts');
     }
 
-    public function renderShow(int $postId) {
-        $post = $this->postFacade->getPostbyId($postId);
+    public function renderShow(int $postId)
+    {
+        $post = $this->postFacade->getPostById($postId);
         $this->postFacade->addView($postId);
 
         if (!$post) {
@@ -48,6 +49,15 @@ class PostPresenter extends \Nette\Application\UI\Presenter
                 break;
             default:
                 $this->error('Neplatný stav příspěvku.');
+        }
+
+        // Přidejte logiku pro získání aktuálního hodnocení uživatele
+        if ($this->getUser()->isLoggedIn()) {
+            $userId = $this->getUser()->getId();
+            $rating = $this->postFacade->getUserRating($userId, $postId);
+            $this->template->userRating = $rating ? $rating->likes : null;
+        } else {
+            $this->template->userRating = null;
         }
     }
 
@@ -89,16 +99,18 @@ class PostPresenter extends \Nette\Application\UI\Presenter
         $this->redirect('show', $post->id);
     }
 
-    public function handleDeleteImage(int $postId) {
+    public function handleDeleteImage(int $postId)
+    {
         $post = $this->postFacade->getPostById($postId);
 
-        if($post) {
+        if ($post) {
             unlink($post['image']);
             $data['image'] = null;
             $this->postFacade->editPost($postId, $data);
             $this->flashMessage('Obrázek k příspěvku byl smazán');
         }
     }
+
     public function handleLiked(int $postId, int $liked)
     {
         if ($this->getUser()->isLoggedIn()) {
@@ -109,7 +121,4 @@ class PostPresenter extends \Nette\Application\UI\Presenter
         }
         $this->redirect('this');
     }
-    
-
-
 }
